@@ -1,123 +1,100 @@
 # RAG Agent Chatbot (n8n Workflow)
 
-This workflow implements a **Retrieval-Augmented Generation (RAG) chatbot** using n8n.  
-It has **two phases**:
+This repository contains an n8n workflow that implements a full **Retrieval-Augmented Generation (RAG) chatbot**.  
+The system works in two phases:
 
-1. **Data Ingestion** – Downloads files, converts them into embeddings, and stores them in a vector database.
-2. **Chat Agent** – Uses the vector store to answer user questions intelligently.
+1. **Data Ingestion Phase** – Load and embed documents, then store them in Pinecone for semantic retrieval.
+2. **Chatbot Phase** – Retrieve relevant chunks from Pinecone and generate intelligent answers using an LLM.
+
+This workflow is useful for:
+- Resume-based Q&A chatbots  
+- Document-based assistants  
+- PDF / Drive knowledge chatbots  
+- Context-aware HR or customer support bots  
 
 ---
 
-## 📌 Workflow Screenshot
-_Add your screenshot below (replace this line with the image)._
+## 📌 Workflow Screenshots
 
-![Workflow Screenshot](./workflow.png)
+### 🔹 1. Workflow Overview  
+![Workflow Overview](./rag-chatbot-overview.png)
 
 ---
 
-## 🧠 Overview of the Workflow
+### 🔹 2. Chat Example – Q&A About Projects  
+![Chat Example 1](./rag-chatbot-chat1.png)
 
-### 🔹 Phase 1 — Build Vector Store (Ingestion Pipeline)
-This phase prepares your knowledge base.
+---
 
-Nodes involved:
-- **Google Drive Trigger** – Detects new or updated documents.
-- **Download File** – Fetches the document from Drive.
-- **Pinecone Vector Store (Upsert)** – Saves your processed text & embeddings.
-- **Embedding (Google Gemini / OpenAI)** – Converts document text into embeddings.
-- **Various text loaders** – Split or process text for vectorization.
+### 🔹 3. Chat Example – Q&A About Education / Skills  
+![Chat Example 2](./rag-chatbot-chat2.png)
+
+---
+
+## 🧠 Workflow Architecture
+
+### 🔷 Phase 1 — Data Ingestion & Vector Store Creation  
+This phase triggers when a file is uploaded to Google Drive.
+
+**Nodes Included:**
+- Google Drive Trigger  
+- Download File  
+- Text Loader / PDF Loader  
+- Embeddings (Google Gemini / OpenAI)  
+- Pinecone Vector Store (Upsert)  
 
 **Purpose:**  
-To index files (PDF, docs, text, etc.) and store them in Pinecone for semantic search.
+To convert document text into embeddings and store them in Pinecone so that the chatbot can retrieve relevant information later.
 
 ---
 
-### 🔹 Phase 2 — Chat Agent (RAG Retrieval + LLM Response)
-This phase handles user chat queries.
+### 🔷 Phase 2 — RAG Chatbot Agent  
+This phase handles user queries.
 
-Nodes involved:
-- **When Chat Message Received** – Chat trigger.
-- **Pinecone Vector Search** – Retrieves top related chunks.
-- **LLM Agent (Google Gemini / OpenAI)** – Generates the final answer.
-- **Simplex Memory (optional)** – Stores conversation history.
-- **Embeddings for Query** – Converts user question to embedding for semantic search.
+**Nodes Included:**
+- Chat Trigger (`When chat message received`)  
+- Embeddings for query  
+- Pinecone Vector Search  
+- LLM Agent (Gemini / OpenAI)  
+- Simplex Memory (Conversation memory)  
 
 **Purpose:**  
-To answer user questions using stored knowledge + LLM reasoning.
+To retrieve context from Pinecone and generate accurate, context-aware responses.
 
 ---
 
 ## 🚀 How It Works
 
-### Step 1 — Store Data
-When a file is uploaded (Google Drive trigger):
-1. File is downloaded.
-2. Document text is extracted & chunked.
-3. Text chunks are converted to embeddings.
-4. Embeddings are stored in Pinecone.
+### 1️⃣ File Upload → Vector Store  
+- User uploads a PDF or document.  
+- Workflow downloads and processes the file.  
+- The document is split into chunks.  
+- Embeddings are generated for each chunk.  
+- Chunks + embeddings are stored in Pinecone.
 
-### Step 2 — Answer Queries
-1. User sends a chat message.
-2. Message is embedded.
-3. Related knowledge is retrieved from Pinecone.
-4. LLM (Agent) uses context + memory to produce a final answer.
+### 2️⃣ Ask a Question → Intelligent Response  
+- The user types a question into the chat UI.  
+- The question is embedded.  
+- Pinecone returns top relevant chunks.  
+- LLM generates a final answer using retrieved context.
 
 ---
 
 ## 🧩 Requirements
 
-### Accounts Needed
-- **Google Drive**
-- **Pinecone**
-- **LLM provider (Gemini, OpenAI, etc.)**
+### Accounts / Services Needed
+- **n8n**
+- **Google Drive API**
+- **Pinecone Vector DB**
+- **Embedding Provider:** Google Gemini / OpenAI
+- **LLM Provider:** Gemini / OpenAI
 
 ### n8n Credentials
-- Google Drive Credential  
-- Pinecone API Credential  
-- LLM Credential  
-- Embeddings Credential (Gemini, OpenAI, etc.)
+- Google Drive OAuth  
+- Pinecone API Key  
+- Gemini / OpenAI API Key  
 
 ---
 
-## 📁 Files Included
+## 📁 Repository Contents
 
-- `workflow.json` – Exported n8n workflow.
-- `workflow.png` – Screenshot of the workflow.
-
----
-
-## ▶️ Setup Guide
-
-1. Import `workflow.json` into n8n.
-2. Configure all required credentials:
-   - Google Drive
-   - Pinecone
-   - LLM (Gemini / OpenAI)
-3. Update Pinecone:
-   - Index name  
-   - Namespace  
-4. Test the ingestion pipeline with one sample file.
-5. Open the n8n chat window and ask questions.
-
----
-
-## 🛠 Troubleshooting
-
-- **Vector search returns empty**  
-  → Check embeddings provider, index name, and namespace.
-
-- **File not processed**  
-  → Verify Google Drive trigger permissions.
-
-- **LLM does not answer correctly**  
-  → Increase the number of retrieved chunks (e.g., topK = 5–10).
-
-- **Memory not preserved**  
-  → Ensure `Simplex Memory` node is connected properly.
-
----
-
-## 📄 License
-Free to use and modify.
-
-\
