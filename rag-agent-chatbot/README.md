@@ -17,12 +17,12 @@ This workflow is useful for:
 ## 📌 Workflow Screenshots
 
 ### 🔹 1. Workflow Overview  
-![Workflow Overview](./rag-chatbot-overview.png)
+![Workflow Overview](./RAG-base-chatbot.jpg)
 
 ---
 
 ### 🔹 2. Chat Example – Q&A About Projects  
-![Chat Example 1](./rag-chatbot-chat1.png)
+![Chat Example 1](./chatbot.jpg)
 
 ---
 
