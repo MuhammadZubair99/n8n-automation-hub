@@ -7,7 +7,7 @@ This n8n workflow reads data from a Google Sheet, sends an email for each row, a
 ## 📌 Workflow Screenshot
 _Add your screenshot below (replace this line with the image)._
 
-![Workflow Screenshot](./workflow.png)
+![Workflow Screenshot](./email-sender-workflow.png)
 
 ---
 
