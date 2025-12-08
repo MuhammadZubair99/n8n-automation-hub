@@ -26,11 +26,6 @@ This workflow is useful for:
 
 ---
 
-### 🔹 3. Chat Example – Q&A About Education / Skills  
-![Chat Example 2](./WhatsApp Image 2025-12-07 at 23.15.45_f12bb4b9.jpg)
-
----
-
 ## 🧠 Workflow Architecture
 
 ### 🔷 Phase 1 — Data Ingestion & Vector Store Creation  
